@@ -1,0 +1,4 @@
+bin/
+obj/
+.MyEnvironment.cs
+university.csproj

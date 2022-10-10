@@ -18,29 +18,28 @@ namespace ProjectX.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]User body)
         {
-            Console.WriteLine(body.username);
-            Console.WriteLine(body.password);
             await Db.Connection.OpenAsync();
             var query = new Login(Db);
             var result = await query.GetPassword(body.username);
    
-            if (result is null || ! BCrypt.Net.BCrypt.Verify(body.password, result))
+            var pass = BCrypt.Net.BCrypt.Verify(body.password, result);
+
+            if (result is null || ! pass)
             {
                 // authentication failed
+                if (result is null) { return new NotFoundResult(); }                
                 return new OkObjectResult(false);
             }
             else
             {
                 // authentication successful
-                return new OkObjectResult(true);
-                Singleton singObject=Singleton.Instance;
-                singObject.Username=body.username;
-                singObject.Password=body.password;
-            }
-            
-        }
 
-    
+                // get userinfo
+                var result2 = await query.FindOneAsyncLoginUser(body.username);
+
+                return new OkObjectResult(result2);             
+            }
+        }
 
         public Database Db { get; }
     }

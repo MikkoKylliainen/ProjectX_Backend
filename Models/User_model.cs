@@ -54,6 +54,22 @@ namespace ProjectX
             //return result.Count > 0 ? result[0] : null;
         }
 
+        public async Task<User> FindOneAsyncLoginUser(string password)
+        {
+            using var cmd = Db.Connection.CreateCommand();
+            cmd.CommandText = @"SELECT * FROM  User  WHERE  password = @password";
+            
+            var result = await ReturnAllAsync(await cmd.ExecuteReaderAsync());
+            //Console.WriteLine(result.Count);
+            if(result.Count > 0){
+                return result[0];
+            }
+            else {
+                return null;
+            }
+            //return result.Count > 0 ? result[0] : null;
+        }
+        
 
         public async Task DeleteAllAsync()
         {

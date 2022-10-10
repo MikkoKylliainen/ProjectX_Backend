@@ -33,7 +33,6 @@ namespace ProjectX.Controllers
             if (result is null)
                 return new NotFoundResult();
             return new OkObjectResult(result);
-
         }
 
         // POST api/User
@@ -51,7 +50,7 @@ namespace ProjectX.Controllers
             }
             return new OkObjectResult(result);
         }
-
+        
         // PUT api/User/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOne(int id, [FromBody] User body)

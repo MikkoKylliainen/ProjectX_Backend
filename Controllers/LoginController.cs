@@ -13,31 +13,35 @@ namespace ProjectX.Controllers
             Db = db;
         }
 
-
         // POST api/login
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]User body)
         {
-            await Db.Connection.OpenAsync();
-            var query = new Login(Db);
-            var result = await query.GetPassword(body.username);
-   
-            var pass = BCrypt.Net.BCrypt.Verify(body.password, result);
+            try {
 
-            if (result is null || ! pass)
-            {
-                // authentication failed
-                if (result is null) { return new NotFoundResult(); }                
+                if (body.password.Length == 0 || body.username.Length == 0) { return new OkObjectResult(false); }
+                await Db.Connection.OpenAsync();
+                var query = new Login(Db);
+                var result = await query.GetPassword(body.username);
+    
+                var pass = BCrypt.Net.BCrypt.Verify(body.password, result);
+
+                if (result is null || ! pass)
+                {
+                    // authentication failed          
+                    return new OkObjectResult(false);
+                }
+                else
+                {
+                    // authentication successful
+
+                    // get userinfo
+                    var result2 = await query.FindOneAsyncLoginUser(body.username);
+
+                    return new OkObjectResult(result2);             
+                }
+            } catch (InvalidCastException e) {
                 return new OkObjectResult(false);
-            }
-            else
-            {
-                // authentication successful
-
-                // get userinfo
-                var result2 = await query.FindOneAsyncLoginUser(body.username);
-
-                return new OkObjectResult(result2);             
             }
         }
 

@@ -1,4 +1,6 @@
 bin/
 obj/
+.vs
+.vscode
 .MyEnvironment.cs
 university.csproj

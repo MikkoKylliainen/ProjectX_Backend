@@ -11,13 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddTransient(_ => new Database(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services
     .AddAuthentication()
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { });
-
 
 builder.Services.AddAuthorization(options =>
 {
@@ -25,7 +23,6 @@ builder.Services.AddAuthorization(options =>
 }); 
 
 builder.Services.AddCors();
-
 
 var app = builder.Build();
 
@@ -44,13 +41,7 @@ app.UseCors(builder =>
 });
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
-//setting the connection string for development environment
-
-
 
 app.Run();

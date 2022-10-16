@@ -29,7 +29,6 @@ namespace ProjectX
             using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"SELECT * FROM  user ;";
             var result=await ReturnAllAsync(await cmd.ExecuteReaderAsync());
-           // Console.WriteLine(result);
             return await ReturnAllAsync(await cmd.ExecuteReaderAsync());
         }
 
@@ -44,14 +43,8 @@ namespace ProjectX
                 Value = iduser,
             });
             var result = await ReturnAllAsync(await cmd.ExecuteReaderAsync());
-            //Console.WriteLine(result.Count);
-            if(result.Count > 0){
-                return result[0];
-            }
-            else {
-                return null;
-            }
-            //return result.Count > 0 ? result[0] : null;
+
+            return result.Count > 0 ? result[0] : null;
         }
 
         public async Task<User> FindOneAsyncLoginUser(string password)
@@ -60,27 +53,10 @@ namespace ProjectX
             cmd.CommandText = @"SELECT * FROM  User  WHERE  password = @password";
             
             var result = await ReturnAllAsync(await cmd.ExecuteReaderAsync());
-            //Console.WriteLine(result.Count);
-            if(result.Count > 0){
-                return result[0];
-            }
-            else {
-                return null;
-            }
-            //return result.Count > 0 ? result[0] : null;
-        }
-        
+            return result.Count > 0 ? result[0] : null;
+        }  
 
-        public async Task DeleteAllAsync()
-        {
-            using var txn = await Db.Connection.BeginTransactionAsync();
-            using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"DELETE FROM  user ";
-            await cmd.ExecuteNonQueryAsync();
-            await txn.CommitAsync();
-        }
-    
-
+        //Insert user into DB
         public async Task<int> InsertAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
@@ -90,7 +66,6 @@ namespace ProjectX
             try
             {
                 await cmd.ExecuteNonQueryAsync();
-                //int lastInsertId = (int) cmd.LastInsertedId; 
                 return 1;
             }
             catch (System.Exception)

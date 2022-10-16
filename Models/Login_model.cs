@@ -84,8 +84,6 @@ namespace ProjectX
             else {
                 return null;
             }
-            
-            //return result.Count > 0 ? result[0] : null;
         }        
         
         private async Task<List<User>> ReturnAllAsync(DbDataReader reader)
@@ -107,9 +105,6 @@ namespace ProjectX
             }
             return posts;
         }
-
-
-
 
     }
 }

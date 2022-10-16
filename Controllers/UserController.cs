@@ -23,7 +23,7 @@ namespace ProjectX.Controllers
             return new OkObjectResult(result);
         }
 
-        // GET api/User/5
+        // GET api/User/ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
         {
@@ -43,7 +43,7 @@ namespace ProjectX.Controllers
             body.password = BCrypt.Net.BCrypt.HashPassword(body.password);
             body.Db = Db;
             int result = await body.InsertAsync();
-            Console.WriteLine("inserted id=" + result);
+
             if (result == 0)
             {
                 return new ConflictObjectResult(0);
@@ -51,7 +51,7 @@ namespace ProjectX.Controllers
             return new OkObjectResult(result);
         }
         
-        // PUT api/User/5
+        // PUT api/User/ID
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOne(int id, [FromBody] User body)
         {
@@ -66,8 +66,10 @@ namespace ProjectX.Controllers
             result.password=body.password;
             result.bio=body.bio;
 
-            if (result is null)
+            if (result is null) {
                 return new NotFoundResult();
+            }
+            
             int updateTest = await result.UpdateAsync();
             if (updateTest == 0)
             {
@@ -86,12 +88,14 @@ namespace ProjectX.Controllers
             await Db.Connection.OpenAsync();
             var query = new User(Db);
             var result = await query.FindOneAsync(id);
-            if (result is null)
+
+            if (result is null) {
                 return new NotFoundResult();
+            }
+            
             await result.DeleteAsync();
             return new OkObjectResult(result);
         }
-
 
         public Database Db { get; }
     }

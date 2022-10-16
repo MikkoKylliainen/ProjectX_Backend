@@ -18,7 +18,6 @@ namespace ProjectX.Controllers
         public async Task<IActionResult> Post([FromBody]User body)
         {
             try {
-
                 if (body.password.Length == 0 || body.username.Length == 0) { return new OkObjectResult(false); }
                 await Db.Connection.OpenAsync();
                 var query = new Login(Db);
@@ -36,9 +35,9 @@ namespace ProjectX.Controllers
                     // authentication successful
 
                     // get userinfo
-                    var result2 = await query.FindOneAsyncLoginUser(body.username);
+                    var result = await query.FindOneAsyncLoginUser(body.username);
 
-                    return new OkObjectResult(result2);             
+                    return new OkObjectResult(result);             
                 }
             } catch (InvalidCastException e) {
                 return new OkObjectResult(false);

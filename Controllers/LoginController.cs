@@ -35,9 +35,9 @@ namespace ProjectX.Controllers
                     // authentication successful
 
                     // get userinfo
-                    var result = await query.FindOneAsyncLoginUser(body.username);
+                    var result2 = await query.FindOneAsyncLoginUser(body.username);
 
-                    return new OkObjectResult(result);             
+                    return new OkObjectResult(result2);             
                 }
             } catch (InvalidCastException e) {
                 return new OkObjectResult(false);

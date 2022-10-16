@@ -23,7 +23,6 @@ namespace ProjectX
             Db = db;
         }
 
-
         public async Task<string> GetPassword(string username)
         {
             using var cmd = Db.Connection.CreateCommand();
